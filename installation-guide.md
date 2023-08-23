@@ -8,7 +8,7 @@ The following version ranges should be compatible:
 - Python 3.6-3.9
 
 ## 2. Make the Database
-Using an instance of Postgres DB:
+Using an instance of Postgres DB: ## Done
 
 - Setup a database named `gutendex` (you can replace `gutendex` with something else if you update the `DATABASE_NAME` environment variable accordingly, described below).
 - Setup a user named `gutendex` for the database (you can also replace `gutendex` with another user name, updating the `DATABASE_USER` environment variable below).

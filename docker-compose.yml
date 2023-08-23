@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgres: # DB 
+    image: postgres:13
+    environment:
+      POSTGRES_USER: gutendex
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: gutendex
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # persisten volume
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Grant access to Guetendex
+
+volumes:
+  postgres_data:
