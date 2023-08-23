@@ -24,6 +24,11 @@ services:
     depends_on:
       postgres_db:
         condition: service_healthy
+    healthcheck:
+        test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
     environment:
       - SECRET_KEY=secretpass
       - DEBUG=false
@@ -33,6 +38,8 @@ services:
       - DATABASE_PASSWORD=123456
       - DATABASE_PORT=5432
       - DATABASE_USER=gutendex
+      - STATIC_ROOT=/var/www/gutendex/static-root/
+      - MEDIA_ROOT=/var/www/gutendex/media/
     volumes:
       - django_catalog_data:/catalog_files/:rw
       - django_static_files:/share-static-files/nginx
@@ -44,7 +51,8 @@ services:
   nginx: # NGINX
     image: nginx:stable
     depends_on:
-      - django-app
+      django-app:
+        condition: service_healthy
     ports:
       - "80:80"
     volumes:
