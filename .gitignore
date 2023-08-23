@@ -1,4 +1,3 @@
 *.pyc
 gutendex/.env
 venv
-catalog_files/tmp/cache/epub

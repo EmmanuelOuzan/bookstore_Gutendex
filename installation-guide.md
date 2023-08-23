@@ -24,12 +24,6 @@ A number of environment variables are used by Gutendex; an example/tempalte can 
 We recommend that you copy this file to a new file called `.env` and edit the values after the `=` sign on each line with the proper data. The Django project will automatically read this file when the server starts.
 
 
-
-
-
-
-
-
 Descriptions of each required variable are below.
 
 - `ADMIN_EMAILS`
@@ -69,14 +63,14 @@ Descriptions of each required variable are below.
 - `STATIC_ROOT`
   This is the path to a server directory where website assets, such as CSS styles for HTML pages, are stored.
 
-## 5. Migrate the Database
+## 5. Migrate the Database !!!!!!! 
 Set up the database for storing the catalog data:
 
 ```
-./manage.py migrate
+./manage.py migrate 
 ```
 
-## 6. Populate the Database
+## 6. Populate the Database !!! 
 Enter the Project Gutenberg catalog data into the Gutendex database. This takes a long time (around several minutes):
 
 ```
@@ -85,16 +79,19 @@ Enter the Project Gutenberg catalog data into the Gutendex database. This takes 
 
 This downloads a file archive of Project Gutenberg's catalog data and decompresses the files into a new directory, `catalog_files`. It places the contained files in `catalog_files/rdf`, and it stores a log in `catalog_files/log` and emails it to the administrators in the environment variables mentioned above.
 
+# Should we do the cron? #
 If your database already contains catalog data, the above command will update it with any new or updated data from Project Gutenberg. I recommend that you schedule this command to run on your server daily – for example, using `cron` on Unix-like machines – to keep your database up-to-date.
+# Crontab -e 
+# 0 0 * * * /usr/local/bin/python /app/manage.py
 
-## 7. Collect Static Files
+## 7. Collect Static Files !!! 
 To show styled HTML pages (i.e. the home page and error pages), you must put the necessary stylesheets into a static-file directory:
 
 ```
 ./manage.py collectstatic
 ```
 
-## 8. Run the Server
+## 8. Run the Server !!! 
 Now you can serve your Django project. You can run this with the following command:
 
 ```
@@ -103,9 +100,11 @@ Now you can serve your Django project. You can run this with the following comma
 
 You can set the listening host and port with `${BIND_HOST}` and `${BIND_PORT}` respectively. More info available in [Django's documentation](https://docs.djangoproject.com/en/4.1/ref/django-admin/#runserver).
 
-### Serving Publicly
+### Serving Publicly CHECK MEDIA and web api itself
+
 In a production environment, one should use Nginx or Apache to serve:
-- static files (located in `static/` directory),
+- static files (located in `static/` directory), # and /var/www/gutendex/static-root
 - `robots.txt` (also located in `static/` directory),
+## !
 - any future user media, and
-- the web API itself (the application iteslef).
+- the web API itself (the application iteslef). # 

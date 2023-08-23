@@ -1,17 +1,64 @@
 version: '3'
 
 services:
-  postgres: # DB 
+  postgres_db: # DB 
     image: postgres:13
     environment:
       POSTGRES_USER: gutendex
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: gutendex
-    ports:
-      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gutendex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
-      - postgres_data:/var/lib/postgresql/data # persisten volume
+      - postgres_data:/var/lib/postgresql/data # persistent volume
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Grant access to Guetendex
+    networks:
+      - backend
+      
+  
+  django-app: # DJANGO! 
+    build: .
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      - SECRET_KEY=secretpass
+      - DEBUG=false
+      - ALLOWED_HOSTS=*
+      - DATABASE_HOST=postgres_db
+      - DATABASE_NAME=gutendex
+      - DATABASE_PASSWORD=123456
+      - DATABASE_PORT=5432
+      - DATABASE_USER=gutendex
+    volumes:
+      - django_catalog_data:/catalog_files/:rw
+      - django_static_files:/share-static-files/nginx
+    networks:
+      - frontend
+      - backend
+  
+
+  nginx: # NGINX
+    image: nginx:stable
+    depends_on:
+      - django-app
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf/conf.d:/etc/nginx/conf.d
+      - django_static_files:/share-static-files/nginx:rw 
+    networks:
+      - frontend
+
 
 volumes:
   postgres_data:
+  django_catalog_data:
+  django_static_files: # Will be shared with nginx # Ask and make sure
+
+networks:
+  frontend:
+  backend:

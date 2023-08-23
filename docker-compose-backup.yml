@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  postgres_db: # DB 
+    image: postgres:13
+    environment:
+      POSTGRES_USER: gutendex
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: gutendex
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # persisten volume
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Grant access to Guetendex
+  django-app:
+    image: python:3.7.17
+    env_file: gutendex/.env
+    environment:
+      - SECRET_KEY=secretpass # Should work
+      - DEBUG=false
+      - ALLOWED_HOSTS=*
+      - DATABASE_HOST=postgres_db
+      - DATABASE_NAME=gutendex
+      - DATABASE_PASSWORD=123456
+      - DATABASE_PORT=5432
+      - DATABASE_USER=gutendex
+
+
+volumes:
+  postgres_data:

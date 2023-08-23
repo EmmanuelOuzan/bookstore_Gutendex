@@ -1,20 +1,28 @@
-ADMIN_EMAILS=you@your.domain.here
+
 ADMIN_NAMES=emmanuel
-ALLOWED_HOSTS=*,localhost,.your.domain.here,127.0.0.1
-DATABASE_HOST=0.0.0.0
+MANAGER_NAMES=emmanuel_manage
+
+# Django
+ALLOWED_HOSTS=*,localhost,.emmanuel.ouzan.com,127.0.0.1
+SECRET_KEY="secretpass"
+DEBUG=false
+
+# Postgress
+DATABASE_HOST=127.0.0.1 # 0.0.0.0
 DATABASE_NAME=gutendex
 DATABASE_PASSWORD=123456
 DATABASE_PORT=5432
 DATABASE_USER=gutendex
-DEBUG=false
-MANAGER_EMAILS=emmanuel.ouzan@gmail.com
-MANAGER_NAMES=emmanuel_manage
+
+
 MEDIA_ROOT=/var/www/gutendex/media/
-SECRET_KEY=123456
+
 STATIC_ROOT=/var/www/gutendex/static-root/
 
 
-
+# Email
+MANAGER_EMAILS=emmanuel.ouzan@gmail.com
+ADMIN_EMAILS=emmanuel.ouzan@gmail.com
 EMAIL_HOST=your.smtp.host.here
 EMAIL_HOST_ADDRESS=gutendex@your.domain.here
 EMAIL_HOST_PASSWORD=your-smtp-host-password
